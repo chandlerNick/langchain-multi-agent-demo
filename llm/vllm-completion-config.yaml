@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vllm-completion-config
+data:
+  vllm.yaml: |
+    model: WisPerMed/Llama-3.1-SauerkrautLM-70b-Instruct-AWQ
+    dtype: auto
+    max_model_len: 4096
+    trust_remote_code: true
+    engine_use_ray: false
+    gpu_memory_utilization: 0.90
+    port: 8000
+    tensor_parallel_size: 2
+    enable_auto_tool_choice: true
+    tool_call_parser: llama3_json
+    chat_template: /vllm-workspace/examples/tool_chat_template_llama3.1_json.jinja    
+
