@@ -1,0 +1,12 @@
+# Keep PVCs in separate file, to avoid accidential deletion
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vllm-completion-cache
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Gi
+  storageClassName: shared

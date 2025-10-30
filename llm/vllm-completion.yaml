@@ -1,0 +1,93 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-completion
+  labels:
+    app: vllm-completion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vllm-completion
+  template:
+    metadata:
+      labels:
+        app: vllm-completion
+        # gpu-cleaner: allow-gpu-idle  # Prevents the cleaner from killing it.
+    spec:
+      tolerations:
+        - key: "nvidia.com/gpu"
+          operator: "Exists"
+          effect: "NoSchedule"
+      nodeSelector:
+        nvidia.com/gpu.family: "ampere"
+      # adjust permissions in HF cache PVC
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: "OnRootMismatch"
+      volumes:
+      - name: vllm-completion-cache
+        persistentVolumeClaim:
+          claimName: vllm-completion-cache
+      # vLLM needs to access the host's shared memory for tensor parallel inference.
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: "16Gi"
+      - name: vllm-completion-config
+        configMap:
+          name: vllm-completion-config
+      containers:
+      - name: llm
+        image: vllm/vllm-openai:latest
+        command: ["vllm", "serve", "--config", "/config/vllm.yaml"]
+        env:
+        - name: HUGGING_FACE_HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hf-token-secret
+              key: token
+        ports:
+        - containerPort: 8000
+        resources:
+          limits:
+            memory: 256G
+            nvidia.com/gpu: "2"
+          requests:
+            cpu: "2"
+            memory: 8G
+            nvidia.com/gpu: "2"
+        volumeMounts:
+        - mountPath: /root/.cache
+          name: vllm-completion-cache
+        - name: shm
+          mountPath: /dev/shm
+        - name: vllm-completion-config
+          mountPath: /config
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 0
+          periodSeconds: 10
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          failureThreshold: 360
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-completion
+spec:
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+  selector:
+    app: vllm-completion
+
