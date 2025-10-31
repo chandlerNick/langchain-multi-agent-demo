@@ -1,0 +1,6 @@
+[project]
+name = 'agentic-email-automation'
+version = '0.1.0'
+description = 'Agentic AI Email Automation using LangGraph and LangChain'
+authors = [{name='Gaurav Pandey'}]
+dependencies = ['langchain', 'langgraph', 'openai', 'python-dotenv']
