@@ -14,14 +14,26 @@ spec:
     metadata:
       labels:
         app: vllm-completion
-        # gpu-cleaner: allow-gpu-idle  # Prevents the cleaner from killing it.
+#        gpu-cleaner: allow-gpu-idle
     spec:
       tolerations:
         - key: "nvidia.com/gpu"
           operator: "Exists"
           effect: "NoSchedule"
-      nodeSelector:
-        nvidia.com/gpu.family: "ampere"
+#      nodeSelector:
+#        nvidia.com/gpu.family: "ada-lovelace"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nvidia.com/gpu.memory
+                    operator: In
+                    values:
+                        - "81920"  # a100 80gb
+                        - "81559"  # h100
+#                        - "143771"  # h200
+#                        - "183359"  # b200
       # adjust permissions in HF cache PVC
       securityContext:
         fsGroup: 100
@@ -40,7 +52,7 @@ spec:
           name: vllm-completion-config
       containers:
       - name: llm
-        image: vllm/vllm-openai:latest
+        image: vllm/vllm-openai:v0.10.2
         command: ["vllm", "serve", "--config", "/config/vllm.yaml"]
         env:
         - name: HUGGING_FACE_HUB_TOKEN
@@ -53,11 +65,11 @@ spec:
         resources:
           limits:
             memory: 256G
-            nvidia.com/gpu: "2"
+            nvidia.com/gpu: "1"
           requests:
             cpu: "2"
             memory: 8G
-            nvidia.com/gpu: "2"
+            nvidia.com/gpu: "1"
         volumeMounts:
         - mountPath: /root/.cache
           name: vllm-completion-cache
@@ -71,7 +83,7 @@ spec:
             path: /health
             port: 8000
           initialDelaySeconds: 0
-          periodSeconds: 10
+          periodSeconds: 180
         startupProbe:
           httpGet:
             path: /health
@@ -90,4 +102,3 @@ spec:
     protocol: TCP
   selector:
     app: vllm-completion
-

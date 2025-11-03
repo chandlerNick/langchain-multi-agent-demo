@@ -34,6 +34,11 @@ deploy_llm:
 	kubectl -n $(k8s_namespace) apply -f llm/vllm-completion-config.yaml
 	kubectl -n $(k8s_namespace) apply -f llm/vllm-completion.yaml
 	@echo "WARNING: VERFIY THE LLM IS READY BEFORE QUERYING AT: http://localhost:8000/v1/chat/completions"
+	@echo "Waiting for LLM pod to ready..."
+	@sleep 5
+	@until kubectl -n $(k8s_namespace) logs -l app=$(APP_LABEL) | grep -q "Application startup complete"; do \
+    	echo "Waiting for model load..."; sleep 60; \
+	done
 	@echo "Pod is ready. Starting port-forward to localhost:$(LOCAL_PORT)..."
 	@POD=$$(kubectl -n $(k8s_namespace) get pod -l app=$(APP_LABEL) -o jsonpath="{.items[0].metadata.name}"); \
 	echo "Forwarding $$POD"; \

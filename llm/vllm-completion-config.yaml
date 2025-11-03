@@ -4,15 +4,19 @@ metadata:
   name: vllm-completion-config
 data:
   vllm.yaml: |
-    model: WisPerMed/Llama-3.1-SauerkrautLM-70b-Instruct-AWQ
+    model: openai/gpt-oss-120b
     dtype: auto
-    max_model_len: 4096
     trust_remote_code: true
     engine_use_ray: false
-    gpu_memory_utilization: 0.90
+    # gpu_memory_utilization and max_num_batched_tokens required for gpt-oss
+    gpu_memory_utilization: 0.95 # default: 0.9
+    max_num_batched_tokens: 256
+    max_num_seqs: 32
     port: 8000
-    tensor_parallel_size: 2
+    tensor_parallel_size: 1
     enable_auto_tool_choice: true
-    tool_call_parser: llama3_json
-    chat_template: /vllm-workspace/examples/tool_chat_template_llama3.1_json.jinja    
-
+    tool_call_parser: openai
+    reasoning_parser: openai_gptoss
+    max_model_len: 65536
+    enable_log_requests: True
+    enable_log_outputs: True

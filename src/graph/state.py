@@ -3,7 +3,7 @@ from typing import TypedDict, Literal
 
 # Define the structure for email classification
 class EmailClassification(TypedDict):
-    intent: Literal["question", "bug", "billing", "feature", "complex"]
+    intent: Literal["question", "spam", "complex"]
     urgency: Literal["low", "medium", "high", "critical"]
     topic: str
     summary: str
