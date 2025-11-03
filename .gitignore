@@ -1,1 +1,78 @@
+# =====================================
+# Python / LangChain Project Gitignore
+# =====================================
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+*.env
+
+# uv lock and build cache
+.uv/
+uv.lock
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Unit test / coverage reports
+.coverage
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+.notebooks_cache/
+
+# Logs
+*.log
+logs/
+*.out
+*.err
+
+# Data folders
+data
+data/raw_emails/
+data/processed_emails/
+!data/.gitkeep
+
+# Environment files
 .env
+.env.local
+.env.*.local
+
+# IDE / editor folders
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Cache
+__pycache__/
+.cache/
+.mypy_cache/
+.pyre/
+.pytype/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Ignore personal config
+*.iml
