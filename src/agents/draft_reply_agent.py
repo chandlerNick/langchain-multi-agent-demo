@@ -2,7 +2,7 @@
 from typing import Literal
 from langgraph.types import Command
 from langchain_openai import ChatOpenAI
-from graph import EmailAgentState
+from agentstructure.state import EmailAgentState
 
 llm = ChatOpenAI(  # NOTE: This wont work until I set up the gpt-oss model in the kubernetes deployment
     model="openai/gpt-oss-120b",

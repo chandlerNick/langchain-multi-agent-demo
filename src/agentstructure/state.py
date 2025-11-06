@@ -17,10 +17,6 @@ class EmailAgentState(TypedDict):
     # Classification result
     classification: EmailClassification | None
 
-    # Raw search/API results
-    search_results: list[str] | None  # List of raw document chunks
-    customer_history: dict | None  # Raw customer data from CRM
-
     # Generated content
     draft_response: str | None
     messages: list[str] | None

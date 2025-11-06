@@ -2,7 +2,7 @@
 from typing import Literal
 from langgraph.graph import END
 from langgraph.types import interrupt, Command
-from graph import EmailAgentState
+from agentstructure.state import EmailAgentState
 
 def human_review(state: EmailAgentState) -> Command[Literal["send_reply", END]]:
     """Pause for human review using interrupt and route based on decision"""

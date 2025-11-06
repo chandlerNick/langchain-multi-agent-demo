@@ -1,6 +1,6 @@
 # Reads and parses incoming emails
 from langchain_core.messages import HumanMessage
-from graph import EmailAgentState
+from agentstructure.state import EmailAgentState
 
 def read_email(state: EmailAgentState) -> dict:
     """Extract and parse email content"""

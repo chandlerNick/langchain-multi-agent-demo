@@ -2,7 +2,7 @@
 from typing import Literal
 from langgraph.types import Command
 from langchain_openai import ChatOpenAI
-from graph import EmailClassification, EmailAgentState
+from agentstructure.state import EmailClassification, EmailAgentState
 
 llm = ChatOpenAI(  # NOTE: This wont work until I set up the gpt-oss model in the kubernetes deployment
     model="openai/gpt-oss-120b",
@@ -11,7 +11,7 @@ llm = ChatOpenAI(  # NOTE: This wont work until I set up the gpt-oss model in th
 )
 
 
-def classify_intent(state: EmailAgentState) -> Command[Literal["search_documentation", "human_review", "draft_response", "bug_tracking"]]:
+def classify_intent(state: EmailAgentState) -> Command[Literal["human_review", "draft_response", "spam"]]:
     """Use LLM to classify email intent and urgency, then route accordingly"""
 
     # Create structured LLM that returns EmailClassification dict
@@ -33,10 +33,8 @@ def classify_intent(state: EmailAgentState) -> Command[Literal["search_documenta
     # Determine next node based on classification
     if classification['intent'] == 'billing' or classification['urgency'] == 'critical':
         goto = "human_review"
-    elif classification['intent'] in ['question', 'feature']:
-        goto = "search_documentation"
-    elif classification['intent'] == 'bug':
-        goto = "bug_tracking"
+    elif classification['intent'] == 'spam':
+        goto = "spam"
     else:
         goto = "draft_response"
 
