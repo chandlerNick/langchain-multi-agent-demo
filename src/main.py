@@ -38,3 +38,8 @@ def stream_graph(data: InvokeInput):
     for event in app.stream(input_state):
         events.append(event)
     return {"events": events}
+
+
+# If run directly, note that the uvicorn app should be used. We can put this in a module perhaps for deployment.
+if __name__ == "__main__":
+    print("Usage: uv run uvicorn main:fastapi_app --reload --port 4000")
