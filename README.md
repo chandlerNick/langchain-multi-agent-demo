@@ -26,7 +26,6 @@ The system intelligently reads incoming emails, classifies their intent, drafts 
 2. **Read incoming mail**
 3. **Classify intent**
    - Spam 🗑️
-   - Bug/Technical report 🐛
    - Normal query 💬
    - Human-required review 🧍‍♂️
 4. **Draft AI reply**
@@ -63,6 +62,6 @@ The system uses multiple AI "agents" (LangGraph nodes):
 
 ```bash
 git clone https://github.com/your-username/agentic-email-ai.git
-pip install -r requirements.txt
+uv sync
 
 
