@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from langgraph.checkpoint.memory import MemorySaver
 from agentstructure.workflow_graph import build_workflow
 
-app = build_workflow()  # Add this if you want a checkpointer: checkpointer=MemorySaver()
+app = build_workflow()  # Send this in if you want a checkpointer: checkpointer=MemorySaver()
 
 # Create FastAPI app to expose endpoints (/invoke, /stream, /resume, /docs)
 fastapi_app = FastAPI(title="LangGraph Email Agent")
