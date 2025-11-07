@@ -30,6 +30,5 @@ def build_workflow(checkpointer=None):
     workflow.add_edge("spam", END)
 
     # --- Compile + serve ---
-    memory = MemorySaver()
-    app = workflow.compile(checkpointer=memory)
+    app = workflow.compile(checkpointer=checkpointer)
     return app

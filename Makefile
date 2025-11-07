@@ -3,7 +3,7 @@ k8s_namespace := eds
 
 APP_LABEL := vllm-completion
 LOCAL_PORT := 8000
-REMOTE_PORT := 8080
+REMOTE_PORT := 8000
 
 
 # ---------------------------------------------------------------------
