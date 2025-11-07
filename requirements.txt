@@ -1,5 +1,0 @@
-langchain
-langgraph
-openai
-python-dotenv
-pytest
