@@ -58,6 +58,11 @@ The system uses multiple AI "agents" (LangGraph nodes):
 | **Email IMAP/SMTP** | Mail reading & sending |
 | **(Upcoming)** Telegram Bot | Notification & approvals |
 
+## Streamlit App 
+- inbox shows emails with clickable bubbles to select.
+- mail content displays the selected email.
+- send reply simulates sending the reply
+
 ## 🛠️ Installation
 
 ```bash

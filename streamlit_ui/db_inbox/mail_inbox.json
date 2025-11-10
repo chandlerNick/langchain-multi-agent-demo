@@ -1,0 +1,62 @@
+[
+  {
+    "from": "dave@example.com",
+    "to": "you@example.com",
+    "subject": "Weekly Report",
+    "body": "Hi,\nPlease find attached the weekly report.\nBest,\nDave"
+  },
+  {
+    "from": "emma@example.com",
+    "to": "you@example.com",
+    "subject": "Birthday Party",
+    "body": "Hey,\nAre you coming to my birthday party this Saturday?\nCheers,\nEmma"
+  },
+  {
+    "from": "frank@example.com",
+    "to": "you@example.com",
+    "subject": "Invoice Reminder",
+    "body": "Hello,\nJust a reminder that invoice #123 is due tomorrow.\nThanks,\nFrank"
+  },
+  {
+    "from": "grace@example.com",
+    "to": "you@example.com",
+    "subject": "Team Meeting",
+    "body": "Hi,\nCan we reschedule the team meeting to Thursday?\nBest,\nGrace"
+  },
+  {
+    "from": "harry@example.com",
+    "to": "you@example.com",
+    "subject": "Vacation Request",
+    "body": "Hello,\nI would like to request vacation from Dec 1 to Dec 10.\nThanks,\nHarry"
+  },
+  {
+    "from": "irene@example.com",
+    "to": "you@example.com",
+    "subject": "Project Deadline",
+    "body": "Hi,\nReminder: the project deadline is next Monday.\nBest,\nIrene"
+  },
+  {
+    "from": "jack@example.com",
+    "to": "you@example.com",
+    "subject": "Conference Invite",
+    "body": "Hello,\nYou are invited to attend the AI conference next month.\nCheers,\nJack"
+  },
+  {
+    "from": "kate@example.com",
+    "to": "you@example.com",
+    "subject": "New Guidelines",
+    "body": "Hi,\nPlease review the new company guidelines attached.\nBest,\nKate"
+  },
+  {
+    "from": "leo@example.com",
+    "to": "you@example.com",
+    "subject": "Lunch Meeting",
+    "body": "Hey,\nShall we have a lunch meeting tomorrow at 12pm?\nCheers,\nLeo"
+  },
+  {
+    "from": "mia@example.com",
+    "to": "you@example.com",
+    "subject": "Document Review",
+    "body": "Hello,\nCan you review the document I sent yesterday?\nThanks,\nMia"
+  }
+]
