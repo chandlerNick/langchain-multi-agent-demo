@@ -1,0 +1,70 @@
+# Makefile for Windows (PowerShell)
+k8s_namespace := eds
+APP_LABEL := vllm-completion
+LOCAL_PORT := 8000
+REMOTE_PORT := 8000
+
+# Force PowerShell for command execution
+SHELL := powershell.exe
+.SHELLFLAGS := -NoProfile -Command
+
+# ---------------------------------------------------------------------
+# Authentication
+# ---------------------------------------------------------------------
+login:
+	@Write-Host "Checking authentication (namespace $(k8s_namespace))..."
+	@Write-Host "If a browser window opens, please log in."
+	# Simply listing pods in YOUR namespace to trigger SSO if needed
+	# This avoids the "Forbidden" error caused by 'cluster-info'
+	kubectl -n $(k8s_namespace) get pods
+
+# ---------------------------------------------------------------------
+# Environment and secrets setup
+# ---------------------------------------------------------------------
+deploy_config:
+	@Write-Host "Creating ConfigMap and HF token secret in namespace $(k8s_namespace)..."
+	-kubectl -n $(k8s_namespace) delete configmap librechat-env --ignore-not-found=true
+	
+	# Create ConfigMap (All on one line to avoid PowerShell parsing errors)
+	kubectl -n $(k8s_namespace) create configmap librechat-env --from-env-file=.env --dry-run=client -o yaml | kubectl apply -f -
+	
+	# Create HF Secret (Read variable + command on the SAME line to keep variable in memory)
+	@$$token = (Get-Content .env | Select-String "HF_TOKEN").ToString().Split('=')[1].Trim(); kubectl create secret generic hf-token-secret --namespace=$(k8s_namespace) --from-literal=token=$$token --dry-run=client -o yaml | kubectl apply -n $(k8s_namespace) -f -
+
+undeploy_config:
+	@Write-Host "Deleting configmap and HF token secret..."
+	-kubectl -n $(k8s_namespace) delete configmap librechat-env --ignore-not-found=true
+	-kubectl -n $(k8s_namespace) delete secret hf-token-secret --ignore-not-found=true
+
+# ---------------------------------------------------------------------
+# vLLM deployment
+# ---------------------------------------------------------------------
+deploy_llm:
+	@Write-Host "Deploying vLLM service..."
+	kubectl -n $(k8s_namespace) apply -f llm/pvcs.yaml
+	kubectl -n $(k8s_namespace) apply -f llm/vllm-completion-config.yaml
+	kubectl -n $(k8s_namespace) apply -f llm/vllm-completion.yaml
+	
+	@Write-Host "WARNING: VERIFY THE LLM IS READY BEFORE QUERYING"
+	@Write-Host "Waiting for LLM pod to be ready (Checking logs)..."
+	
+	# Wait loop (All on one logical line for Windows compatibility)
+	@while ($$true) { $$log = kubectl -n $(k8s_namespace) logs -l app=$(APP_LABEL) --tail=50 2>&1; if ($$log -match "Application startup complete") { Write-Host "Startup complete detected!"; break; } Write-Host "Waiting for model load... (Retrying in 5s)"; Start-Sleep -Seconds 5; }
+	
+	@Write-Host "Pod is ready. Starting port-forward..."
+	@$$podName = kubectl -n $(k8s_namespace) get pod -l app=$(APP_LABEL) -o jsonpath="{.items[0].metadata.name}"; Write-Host "Forwarding $$podName to localhost:$(LOCAL_PORT)..."; kubectl -n $(k8s_namespace) port-forward $$podName $(LOCAL_PORT):$(REMOTE_PORT)
+
+undeploy_llm:
+	@Write-Host "Undeploying vLLM service..."
+	-kubectl -n $(k8s_namespace) delete -f llm/vllm-completion.yaml --ignore-not-found=true
+	-kubectl -n $(k8s_namespace) delete -f llm/vllm-completion-config.yaml --ignore-not-found=true
+
+# ---------------------------------------------------------------------
+# Convenience targets
+# ---------------------------------------------------------------------
+deploy: login deploy_config deploy_llm
+undeploy: undeploy_llm undeploy_config
+
+status:
+	@Write-Host "Pods in namespace $(k8s_namespace):"
+	kubectl -n $(k8s_namespace) get pods -o wide
