@@ -55,9 +55,12 @@ if st.button("Send to Agent"):
                         if "classification" in output_json:
                             st.subheader("🔍 Classification")
                             classification = output_json["classification"]
-                            
                             df_classif = pd.DataFrame([classification])
-                            st.dataframe(df_classif, use_container_width=True)
+                            summary = df_classif['summary'][0]
+                            df_classif.drop(columns='summary', inplace = True)
+                            st.table(df_classif)
+                            st.subheader("Summary")
+                            st.markdown(summary)
                         
                         # Section 2: AI Advice / Interrupts
                         if "__interrupt__" in output_json and output_json["__interrupt__"]:
@@ -77,11 +80,11 @@ if st.button("Send to Agent"):
                                 height=350
                             )
                             
-                            col_approve, col_reject = st.columns([1, 4])
-                            with col_approve:
-                                if st.button("Approve & Send"):
+                            col_rove, col_reject = st.columns([1, 4])
+                            with col_rove:
+                                if st.button("rove & Send"):
                                     st.balloons()
-                                    st.success("Email sent successfully!")
+                                    st.success("Email sent successfully simulated!")
 
                     except requests.exceptions.JSONDecodeError:
                         st.error("Agent returned 200 OK but invalid JSON.")
@@ -99,7 +102,7 @@ if st.button("Send to Agent"):
                 st.markdown("""
                 **Could not connect to the agent.** Please ensure the backend is running:
                 1. Open a terminal in `src/multi-agent-system`
-                2. Run `uv run uvicorn main:fastapi_app --reload --port 4000`
+                2. Run `uv run uvicorn main:fastapi_ --reload --port 4000`
                 """)
             except Exception as e:
                 st.error(f"An unexpected error occurred: {e}")
