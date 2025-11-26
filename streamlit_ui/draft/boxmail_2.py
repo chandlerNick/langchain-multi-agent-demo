@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import json 
 import random
+import os
 # # Input data
 # input_json = {
 #   "email_content": "Your invoice seems wrong, please fix it.",
@@ -39,14 +40,20 @@ import random
 #     }
 #   ]
 # }
-with open(".\streamlit_ui\llmspeech.json", "r") as f:
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+json_path = os.path.join(script_dir, "streamlit_ui", "llmspeech.json")
+with open(json_path, "r") as f:
     emails = json.load(f)
 selected_email = random.choice(emails)
 
 input_json = selected_email["input_json"]
 output_json = selected_email["output_json"]
 
+st.title("Demonstration of langGraph power")
+
 # ---------- UI ----------
+st.markdown("---")
 st.header("📧 Incoming Email")
 
 col1, col2 = st.columns(2)
@@ -61,6 +68,7 @@ with st.expander("📝 Email Content", expanded=True):
     st.markdown(f"<p style='font-size:18px'>{input_json['email_content']}</p>", unsafe_allow_html=True)
 
 # ---------- LangGraph response section ----------
+st.markdown("---")
 st.header('LangGraph response')
 
 # Classification block
