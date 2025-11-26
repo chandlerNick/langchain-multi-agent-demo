@@ -1,89 +1,98 @@
-📧 Agent Mail Interface (Streamlit)
+# 📧 Agent Mail Interface (Streamlit)
 
-This folder contains the Streamlit front-end for the LangGraph multi-agent system. It lets you simulate incoming emails, visualize agent reasoning (classification), and review or approve drafted responses.
+This directory contains the **Streamlit front-end** for the LangGraph multi-agent system. It provides a user interface to simulate incoming emails, visualize agent reasoning (classification), and review or approve drafted responses.
 
-🏗 Architecture
+---
 
-This UI acts as the client in a microservices setup:
+## 🏗️ Architecture
 
-- Frontend (this app): runs on port 8501 and sends JSON payloads to the agent.
-- Backend (Agent): expected to be available at http://127.0.0.1:4000.
-- LLM (cluster): typically connected via a tunnel on port 8000.
+This UI operates as the client in a microservices architecture:
 
-## Getting started
+* **Frontend (This App):** Runs on port `8501`. Sends JSON payloads to the agent backend.
+* **Backend (Agent):** Hosted via FastAPI, expected to be available at `http://127.0.0.1:4000`.
+* **LLM (Cluster):** The Large Language Model typically connected via a tunnel on port `8000`.
 
-Prerequisites:
+---
 
-- Python 3.10+
-- A package manager (e.g., `uv` if you use it here, or `pip`)
+## ✅ Prerequisites
 
-Important: the multi-agent backend must be running and reachable on port 4000 for this UI to function.
+Before running the application, ensure you have the following installed:
 
-### Installation
+* **Python 3.10+**
+* **The `uv` package manager**
+* **Required Python libraries:**
+    ```bash
+    pip install streamlit pandas requests
+    ```
 
-From the project root, change to this directory and install required dependencies:
+---
 
-```powershell
-cd streamlit_ui
-# Example using the uv package manager if available
-uv add streamlit pandas requests
+## 🚀 Installation & Startup
 
-# Alternatively (if you don't have `uv`) install via pip from the project requirements
-pip install -r ../requirements.txt
-```
-### Backend preparation 
-For LLM connection and backend configuration, see `src/multi-agent-system/README.md`.
+To run the full system, you will need to open **3 separate terminal windows** at the **root** of the project folder.
 
-### Run the app
+### Linux / macOS
 
-To start the dashboard run:
+1.  **Terminal 1 (Infrastructure):**
+    Deploy the infrastructure.
+    ```bash
+    make deploy
+    ```
 
-```powershell
-streamlit run boxmail_using_agent_structure.py
-```
+2.  **Terminal 2 (Backend):**
+    *Wait for Terminal 1 to finish.* (This may take time as it loads the LLM from Hugging Face to the cluster).
+    ```bash
+    cd src/multi-agent-system
+    uv run uvicorn main:fastapi_app --reload --port 4000
+    ```
 
-This will open your default browser at http://localhost:8501.
+3.  **Terminal 3 (Frontend):**
+    Launch the Streamlit UI.
+    ```bash
+    streamlit run ./streamlit_ui/app.py
+    ```
 
-### 📖 Usage guide
+### Windows
 
-Incoming Email section:
+1.  **Terminal 1 (Infrastructure):**
+    Deploy the infrastructure.
+    ```powershell
+    make deploy
+    ```
 
-- Sender Email: simulate who sent the message (e.g. customer@example.com).
-- Email Content: paste the email text you want the agent to process.
-- Send to Agent: click the button to send the request to your FastAPI backend.
+2.  **Terminal 2 (Backend):**
+    *Wait for Terminal 1 to finish.* (This may take time as it loads the LLM from Hugging Face to the cluster).
+    ```powershell
+    cd src\multi-agent-system
+    uv run uvicorn main:fastapi_app --reload --port 4000
+    ```
 
-Review Response section:
+3.  **Terminal 3 (Frontend):**
+    Launch the Streamlit UI.
+    ```powershell
+    streamlit run .\streamlit_ui\app.py
+    ```
 
-- Classification: shows how the agent categorized the email (e.g. "Complaint", "Billing") and the confidence score.
-- AI Advice: if the agent detects a critical issue, an alert or recommendation is shown.
-- Draft Response: the proposed reply — you can edit this before performing the simulated "send".
+> **Note:** Once Terminal 3 is running, your default browser should automatically open to `http://localhost:8501`.
 
-🔧 Troubleshooting
+---
 
-❌ Connection Failed
+## 📖 Usage Guide
 
-Cause: the Streamlit app cannot reach the Agent API.
+### 1. Incoming Email Simulation
+Use this section to trigger the agent.
+* **Sender Email:** Simulate who sent the message (e.g., `customer@example.com`).
+* **Email Content:** Paste the raw email text you want the agent to process.
+* **Send to Agent:** Click this button to dispatch the request to the FastAPI backend.
 
-Fix: make sure the Agent backend is running:
+### 2. Review Response
+View the results processed by the agent.
+* **Classification:** Displays how the agent categorized the email (e.g., "Complaint", "Billing") along with a confidence score.
+* **AI Advice:** If the agent detects a critical issue or requires human attention, an alert or recommendation will appear here.
+* **Draft Response:** The proposed reply generated by the LLM. You can edit this text before performing the simulated "send."
 
-```powershell
-# from src/multi-agent-system
-uv run uvicorn main:fastapi_app --reload --port 4000
-```
+---
 
-Agent Error: 500 Internal Server Error
+## 🔍 Troubleshooting
 
-Cause: the Agent (port 4000) crashed, often because it cannot communicate with the LLM (port 8000).
-
-Fix: ensure your Kubernetes tunnel or LLM connection is active from the project root:
-
-```powershell
-make deploy
-# or check that a kubectl port-forward is running
-```
-
-JSONDecodeError
-
-Cause: the Agent returned a non-JSON response (usually an HTML error page).
-
-Fix: check the debug output in the Streamlit UI and the Agent process logs for details.
+For more detailed information regarding the backend setup, please refer to the documentation located in `src/multi-agent-system/README.md`.
