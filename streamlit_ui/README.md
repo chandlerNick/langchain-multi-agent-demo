@@ -31,7 +31,7 @@ uv add streamlit pandas requests
 # Alternatively (if you don't have `uv`) install via pip from the project requirements
 pip install -r ../requirements.txt
 ```
-
+### Backend preparation 
 For LLM connection and backend configuration, see `src/multi-agent-system/README.md`.
 
 ### Run the app
