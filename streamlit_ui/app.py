@@ -8,6 +8,20 @@ st.set_page_config(page_title="Agent Mail Interface", layout="wide")
 st.title("Demonstration of LangGraph Power")
 st.markdown("Connects to the Multi-Agent System on port 4000")
 
+# ---------- USER Metadata ----------
+st.sidebar.header("Personal Metadata")
+with st.sidebar :
+    first_name = st.text_input('First Name', value="Yann")
+    last_name = st.text_input('Last Name', value="L'Hotelier")
+    company = st.text_input('Compagnie', value="BHT")
+    role = st.text_input('Role', value="Master Data Science student")
+
+user_metadata = (
+    f"First Name: {first_name}\n"
+    f"Last Name: {last_name}\n"
+    f"Company: {company}\n"
+    f"Role: {role}"
+)
 # ---------- MAIN: Input Section ----------
 st.markdown("---")
 st.header("📧 Incoming Email")
@@ -31,6 +45,7 @@ if st.button("Send to Agent"):
             "email_content": email_content,
             "sender_email": sender_email,
             "email_id": email_id,
+            "user_metadata": user_metadata,
         }
         
         # 2. Define API Endpoint
