@@ -79,6 +79,9 @@ To run the full system, you will need to open **3 separate terminal windows** at
 
 ## 📖 Usage Guide
 
+### 0. Metadata from the user
+In the slidebar, please give your information to make the llm able to draft a good response.
+
 ### 1. Incoming Email Simulation
 Use this section to trigger the agent.
 * **Sender Email:** Simulate who sent the message (e.g., `customer@example.com`).
