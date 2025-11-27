@@ -98,9 +98,12 @@ if st.button("Send to Agent"):
                             col_rove, col_reject = st.columns([1, 4])
                             with col_rove:
                                 if st.button("rove & Send"):
-                                    st.balloons()
                                     st.success("Email sent successfully simulated!")
-
+                        else :             
+                            st.subheader("If you want to answer")
+                            st.text_area("Rewrite it only if you're sure that's not a spam")
+                            if st.button("Write & Send"):
+                                    st.success("Email sent successfully simulated!")
                     except requests.exceptions.JSONDecodeError:
                         st.error("Agent returned 200 OK but invalid JSON.")
                         st.code(response.text)
