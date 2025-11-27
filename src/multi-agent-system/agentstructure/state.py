@@ -13,6 +13,7 @@ class EmailAgentState(TypedDict):
     email_content: str
     sender_email: str
     email_id: str
+    user_metadata: str
 
     # Classification result
     classification: EmailClassification | None

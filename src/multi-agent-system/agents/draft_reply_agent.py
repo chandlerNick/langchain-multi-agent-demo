@@ -42,6 +42,8 @@ def draft_response(state: EmailAgentState) -> Command[Literal["human_review", "s
     - Be professional and helpful
     - Address their specific concern
     - Use the provided documentation when relevant
+    - Please sign with this metadata : 
+    {state['user_metadata']}
     """
 
     response = llm.invoke(draft_prompt)

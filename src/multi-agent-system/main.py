@@ -14,6 +14,7 @@ class InvokeInput(BaseModel):
     email_content: str
     sender_email: str
     email_id: str
+    user_metadata: str
 
 @fastapi_app.post("/invoke")
 def invoke_graph(data: InvokeInput):
@@ -22,6 +23,7 @@ def invoke_graph(data: InvokeInput):
         "email_content": data.email_content,
         "sender_email": data.sender_email,
         "email_id": data.email_id,
+        "user_metadata": data.user_metadata,
     }
     result = app.invoke(input_state)
     return result
@@ -33,6 +35,7 @@ def stream_graph(data: InvokeInput):
         "email_content": data.email_content,
         "sender_email": data.sender_email,
         "email_id": data.email_id,
+        "user_metadata": data.user_metadata,
     }
     events = []
     for event in app.stream(input_state):
