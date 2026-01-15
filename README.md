@@ -4,6 +4,8 @@
 This project implements an **agentic AI workflow** to automate email handling and responses using **LangGraph** and **LangChain**.  
 The system intelligently reads incoming emails, classifies their intent, drafts responses, and sends them — with optional human-in-loop review for critical messages.
 
+It utilizes GPT-OSS-120B as the underlying LLM.
+
 ---
 
 ## 🚀 Features
