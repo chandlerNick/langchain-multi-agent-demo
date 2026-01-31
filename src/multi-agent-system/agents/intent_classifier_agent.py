@@ -4,7 +4,7 @@ from langgraph.types import Command
 from langchain_openai import ChatOpenAI
 from agentstructure.state import EmailClassification, EmailAgentState
 
-llm = ChatOpenAI(  # NOTE: This wont work until I set up the gpt-oss model in the kubernetes deployment
+llm = ChatOpenAI(
     model="openai/gpt-oss-120b",
     api_key="dummy",
     base_url="http://localhost:8000/v1"

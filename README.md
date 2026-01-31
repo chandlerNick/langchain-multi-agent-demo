@@ -1,74 +1,15 @@
-# 📧 Agentic AI Email Automation System  
-**Built with LangGraph + LangChain**
+# Agentic AI Email Automation System  
+**Built with LangGraph**
 
-This project implements an **agentic AI workflow** to automate email handling and responses using **LangGraph** and **LangChain**.  
-The system intelligently reads incoming emails, classifies their intent, drafts responses, and sends them — with optional human-in-loop review for critical messages.
+This project implements an **agentic AI workflow** to automate email handling and responses using **LangGraph**.  
+The system intelligently reads incoming emails, classifies their intent, drafts responses, and sends them - with optional human-in-loop review for critical messages.
 
-It utilizes GPT-OSS-120B as the underlying LLM.
+It utilizes GPT-OSS-120B as the underlying LLM which we deploy on the BHT compute cluster's Nvidia A100 80GB GPUs.
 
----
+## Further details
 
-## 🚀 Features
+For a quick overview of the project (including photos of UI), look at Agentic_Email_Automation_Presentation.pdf
 
-✅ Automated email reading  
-✅ Intent classification (Spam / Bug / Normal / Human-critical)  
-✅ AI-generated draft reply  
-✅ Human Review loop for flagged emails  
-✅ Autonomous reply sending for safe messages  
-✅ Modular agent nodes (easily extendable)  
-✅ Future scope: Telegram bot integration for human-in-loop alerts & approvals  
+If you want to replicate the workflow (and have sufficient resources) examine the directories `src/multi-agent-system` and `src/streamlit_ui` as well as the `.env.example` and `Makefile`.
 
----
-
-## 🧠 System Flow
-
-### High-Level Pipeline
-
-1. **Start**
-2. **Read incoming mail**
-3. **Classify intent**
-   - Spam 🗑️
-   - Normal query 💬
-   - Human-required review 🧍‍♂️
-4. **Draft AI reply**
-5. **Review (Auto or Human)**
-6. **Send reply or terminate**
-7. **End**
-
----
-
-## 🧩 Agent Nodes
-
-The system uses multiple AI "agents" (LangGraph nodes):
-
-| Agent | Responsibility |
-|-------|----------------|
-| 📥 Mail Reader | Fetches new emails |
-| 🧠 Intent Classifier | Categorizes email intent |
-| ✍️ Reply Generator | Drafts intelligent responses |
-| 🧍 Human Review Agent | Approves / modifies critical replies |
-| 📤 Auto-Send Agent | Sends final email |
-
-## 📦 Tech Stack
-
-| Tool | Purpose |
-|------|--------|
-| **LangChain** | LLM orchestration |
-| **LangGraph** | Agent workflow graph |
-| **LLM (OpenAI / Local)** | NLP + Response generation |
-| **Python** | Backend logic |
-| **Email IMAP/SMTP** | Mail reading & sending |
-| **(Upcoming)** Telegram Bot | Notification & approvals |
-
-## Streamlit App 
-- inbox shows emails with clickable bubbles to select.
-- mail content displays the selected email.
-- send reply simulates sending the reply
-
-## 🛠️ Installation
-
-```bash
-git clone https://github.com/your-username/agentic-email-ai.git
-uv sync
-
-
+Note that the system primarily follows this [tutorial](https://docs.langchain.com/oss/python/langgraph/thinking-in-langgraph) with some modifications and plumbing / ops done to serve the LLM, create a front end, and wrap the agent in a service.
